@@ -20,7 +20,7 @@ var concat = require('gulp-concat');
 var minifyHtml = require('gulp-minify-html');
 var imageMin = require('gulp-imagemin');
 var cache = require('gulp-cache');
-var pxtorem = require('gulp-pxtorem');
+// var pxtorem = require('gulp-pxtorem');
 
 gulp.task('sass',function(){
     gulp.src(['src/css/main.scss'])
@@ -47,7 +47,7 @@ gulp.task('sass',function(){
             suffix: '.min'
         }))
         .pipe(cleanCss())
-        .pipe(pxtorem({replace: false }))
+        // .pipe(pxtorem({replace: false }))
         .pipe(sourcemaps.write())
         // .pipe(debug())
         .pipe(gulp.dest('dist/css'))
