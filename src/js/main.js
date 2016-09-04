@@ -1,5 +1,3 @@
-
-
 $( document ).ready(function() {
 
 	//plugin function, place inside DOM ready function
@@ -22,27 +20,59 @@ $( document ).ready(function() {
 	  t = null;
 	  return this;
 	}
-	$.wait = function(delay, context){
-	  var deferred = $.Deferred();
-	  var timer = setTimeout(function(){
-	    deferred.resolveWith(context || deferred);
-	  }, delay);
-	  deferred.fail(function(){
-	    clearTimeout(timer);
-	  });
-	  return deferred;
-	};
+	Array.prototype.randomize = function (x,y) {
+		for (var i = 0; i < this.length; i++) {
+			this.swap(i,getRandomIntInclusive(0,i));
+		}
+	}
+	Array.prototype.compare = function (a,b) {
+		if (this[a] > this[b]) { return 1; }
+		if (this[a] < this[b]) { return -1; }
+		return 0;
+	}
+
+	//////////////	SA 	//////////////
+
+
+	Array.prototype.bubbleSort = function () {
+		var i = 0, j = 1;
+		var max = ra.length - 1;
+		var bubbleSortInterval = window.setInterval(function(){
+			bg[j-1] = 'red';
+			bg[j] = 'red';
+			myChart.update();
+			if (ra.compare(j - 1, j) > 0) {
+					ra.swap(j, j - 1);
+				}
+			if (j==max-i) {
+				if (i==max) {
+					clearInterval( bubbleSortInterval );
+				} else { i++ }
+				j=1;
+			} else { j++ }
+			myChart.update();
+			bg[j-2] = 'hsla(0,100%,85%,1)';
+			bg[j-1] = 'hsla(0,100%,85%,1)';
+		}, 0);
+	}
+
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	var arrayLength = 100;
 	window.ra = [];
-	for (var i = 0; i < 60; i++) {
+	for (var i = 0; i < arrayLength; i++) {
 		ra[i] = i+1;
 		ra.swap(i,getRandomIntInclusive(0,i));
 	}
-	window.oa = []
-	for (var i = 0; i < 60; i++) {
+	window.oa = [];
+	for (var i = 0; i < arrayLength; i++) {
 		oa[i] = i+1;
 	}
+	window.bg = [];
+	for (var i = 0; i < arrayLength; i++) {
+		bg[i] = 'hsla(0,100%,85%,1)';
+	}
+
 
 	// console.log(ra);
 
@@ -54,7 +84,7 @@ $( document ).ready(function() {
 	        datasets: [{
 	            data: ra,
 	            borderWidth: 1,
-	            backgroundColor: 'hsla(0,100%,85%,1)',
+	            backgroundColor: bg,
 	            bordercolor: 'hsla(0,100%,55%,1)'
 	        }]
 	    },
@@ -65,15 +95,24 @@ $( document ).ready(function() {
 	                    beginAtZero:false
 	                }
 	            }]
+	        },
+	        tooltips:{
+	        	enabled:false
 	        }
 	    }
 	});
 
 	$("table.sortable").tablesorter();
 	$('td:first-child').prepend('<i class="fa fa-cog" aria-hidden="true"></i>');
-
+	$('.random.btn').on('click',function(){
+		ra.randomize();
+		myChart.update();
+	});
 
 	//quicksort.js from : https://github.com/benoitvallon/computer-science-in-javascript/blob/master/sorting-algorithms-in-javascript/quicksort.js
+
+
+
 
 
 	$('td i.fa.fa-cog').on('click',function(){
@@ -111,7 +150,7 @@ $( document ).ready(function() {
 		} else if (type == 'Selection sort') {
 
 		} else if (type == 'Bubble sort') {
-
+			ra.bubbleSort();
 		} else if (type == 'Cycle sort') {
 
 		} else if (type == 'Strand sort') {
@@ -134,7 +173,9 @@ $( document ).ready(function() {
 			$.noop();
 		}
 
-
 	})
 });
 
+// $(window).load(function(){
+// 	ra.bubbleSort();
+// })
